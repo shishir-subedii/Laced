@@ -55,7 +55,7 @@ export default function AdminRefundDetailPage() {
         >
           Back to refunds
         </Link>
-        <h2 className="mt-2 text-3xl font-semibold text-white-900">
+        <h2 className="mt-2 text-3xl font-semibold text-white">
           Refund request
         </h2>
       </div>
