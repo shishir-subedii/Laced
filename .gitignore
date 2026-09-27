@@ -23,3 +23,8 @@ Laced.Api/appsettings.Local.json
 # Local uploaded product files
 Laced.Api/wwwroot/uploads/products/*
 !Laced.Api/wwwroot/uploads/products/.gitkeep
+
+
+backend-doc.txt
+dataentry.txt
+deployment guide.txt
