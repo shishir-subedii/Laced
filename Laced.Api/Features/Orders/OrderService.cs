@@ -153,6 +153,11 @@ public class OrderService(ApplicationDbContext dbContext) : IOrderService
         }
 
         order.OrderStatus = requestedStatus;
+        if (order.PaymentMethod == PaymentMethod.COD && requestedStatus == OrderStatus.Delivered)
+        {
+            order.PaymentStatus = PaymentStatus.Paid;
+        }
+
         order.UpdatedAt = DateTime.UtcNow;
         await dbContext.SaveChangesAsync();
         return Result<OrderResponse>.Success(ToResponse(order));

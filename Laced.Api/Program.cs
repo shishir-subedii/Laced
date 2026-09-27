@@ -65,6 +65,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.Configure<CloudinaryOptions>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddScoped<IImageStorage, CloudinaryImageStorage>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.Configure<EsewaOptions>(builder.Configuration.GetSection("Esewa"));

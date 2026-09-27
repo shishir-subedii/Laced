@@ -66,7 +66,9 @@ export default function OrderDetailPage() {
   const canPayAgain = paymentMethod === 1 && orderStatus !== 5 && paymentStatus !== 1 && paymentStatus !== 3;
   const canCheckPayment = paymentMethod === 1 && paymentStatus === 0 && orderStatus !== 5;
   const existingRefund = refunds.find((refund) => refund.orderId === id && Number(refund.status) !== 2);
-  const canRequestRefund = orderStatus === 5 && paymentStatus === 1 && paymentMethod === 1 && !existingRefund;
+  const canRequestRefund = paymentStatus === 1
+    && ((paymentMethod === 1 && orderStatus === 5) || (paymentMethod === 0 && orderStatus === 4))
+    && !existingRefund;
 
   const handleCancel = async () => {
     if (!window.confirm('Cancel this order?')) {

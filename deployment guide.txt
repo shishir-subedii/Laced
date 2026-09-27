@@ -184,17 +184,10 @@ mix sandbox URLs with production credentials.
 1.8 Product image storage
 -------------------------
 
-`ProductService.cs` stores files in:
-
-    Laced.Api/wwwroot/uploads/products
-
-`Program.cs` serves this directory using `UseStaticFiles()`.
-The database stores paths such as `/uploads/products/file.jpg`. The frontend
-uses `VITE_API_BASE_URL` to turn those paths into backend URLs.
-
-The upload directory is ignored by Git. Ephemeral hosts may delete uploaded
-images after restart or deployment. Use persistent disk/object storage for a
-real store; the current code does not automatically use object storage.
+`ProductService.cs` uploads files to the configured Cloudinary folder. The
+database stores Cloudinary HTTPS URLs, which the frontend uses directly.
+Image delivery therefore does not depend on the API container filesystem or
+Render instance lifecycle.
 
 
 2. VALUES TO PREPARE
@@ -473,7 +466,7 @@ Result:
 ------------------------------
 
 Confirm the plan supports ASP.NET Core .NET 10, the required hosting runtime,
-HTTPS certificates, external PostgreSQL, Web Deploy/FTP, writable uploads,
+HTTPS certificates, external PostgreSQL, Web Deploy/FTP, Cloudinary credentials,
 and IIS URL Rewrite. If it does not support .NET 10, the current project
 cannot be deployed unchanged.
 
@@ -610,12 +603,14 @@ frontend `index.html` in the deployed static site:
 6.9 Upload persistence
 ----------------------
 
-Verify the SmarterASP application identity can write to:
+Set these environment variables in the backend deployment:
 
-    wwwroot/uploads/products
+    Cloudinary__CloudName
+    Cloudinary__ApiKey
+    Cloudinary__ApiSecret
+    Cloudinary__ProductFolder
 
-The current code stores images on the backend filesystem. Use persistent or
-object storage if redeployment must not remove images.
+Images are stored in Cloudinary and survive backend redeployments.
 
 
 7. DEPLOY EVERYTHING WITH RENDER + VERCEL + NEON

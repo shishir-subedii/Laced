@@ -353,7 +353,7 @@ Product response object:
     {
       "id": "image-guid",
       "fileName": "abc123.jpg",
-      "url": "/uploads/products/abc123.jpg",
+      "url": "https://res.cloudinary.com/<cloud-name>/image/upload/laced/products/abc123",
       "isHero": true
     }
   ]
@@ -379,7 +379,7 @@ Product size fields:
 Product image fields:
 - id: GUID string.
 - fileName: generated stored file name.
-- url: string path such as `/uploads/products/abc123.jpg`.
+- url: string Cloudinary secure URL such as `https://res.cloudinary.com/<cloud-name>/image/upload/...`.
 - isHero: boolean.
 
 5. GET /api/products
@@ -484,8 +484,8 @@ Image validation:
 - accepted content types: `image/jpeg`, `image/png`, `image/webp`.
 - each file must be nonempty.
 - maximum file size is 5 MB.
-- files are stored under `wwwroot/uploads/products`.
-- public path is `/uploads/products/{generated-file-name}`.
+- files are stored in the configured Cloudinary folder.
+- public URLs are Cloudinary secure URLs returned by the API.
 
 Hero selection precedence:
 1. Matching `heroImageId`.
@@ -603,7 +603,7 @@ Cart data object:
       "productId": "product-guid",
       "productSizeId": "size-guid",
       "productName": "Air Max",
-      "heroImage": "/uploads/products/abc123.jpg",
+      "heroImage": "https://res.cloudinary.com/<cloud-name>/image/upload/laced/products/abc123",
       "size": 42,
       "quantity": 2,
       "unitPrice": 12000.00,
@@ -1215,9 +1215,9 @@ Fields:
 
 Business rules:
 - order must exist and belong to the user.
-- PaymentMethod must be Esewa.
 - PaymentStatus must be Paid.
-- OrderStatus must be Cancelled.
+- for eSewa, OrderStatus must be Cancelled.
+- for COD, OrderStatus must be Delivered.
 - an existing refund with any status other than Rejected blocks another request.
 - this is a manual refund request; no money is sent automatically.
 
@@ -1383,11 +1383,11 @@ The backend runs `Database.MigrateAsync()` during startup. It does not reset or 
 
 Static files are enabled. Uploaded product images can be requested using the returned relative URL:
 
-http://localhost:5096/uploads/products/{generated-file-name}
+https://res.cloudinary.com/<cloud-name>/image/upload/<public-id>
 
 or the HTTPS host:
 
-https://localhost:7183/uploads/products/{generated-file-name}
+https://res.cloudinary.com/<cloud-name>/image/upload/<public-id>
 
 Swagger has a Bearer security definition and an Authorize button. Enter the JWT according to the Swagger UI's bearer prompt.
 
@@ -1406,7 +1406,7 @@ FRONTEND INTEGRATION NOTES
 - `/api/auth/me` includes the user ID.
 - Product creation/update uses multipart/form-data. The sizes field is a JSON string, not repeated scalar fields.
 - Product images are uploaded as repeated `images` file fields.
-- Product image URLs are relative `/uploads/products/...` paths and are publicly served by static-file middleware.
+- Product image URLs are absolute Cloudinary HTTPS URLs and are served independently of the API container.
 - Product list pagination is in `data.items`, `data.page`, `data.pageSize`, `data.totalItems`, and `data.totalPages`.
 - Public product reads only show active products.
 - Cart totals use current product prices; carts do not reserve inventory.

@@ -10,7 +10,7 @@ namespace Laced.Api.Features.Products;
 
 public class ProductService(
     ApplicationDbContext dbContext,
-    IWebHostEnvironment environment) : IProductService
+    IImageStorage imageStorage) : IProductService
 {
     private const long MaxImageSize = 5 * 1024 * 1024;
     private static readonly HashSet<string> AllowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
@@ -217,7 +217,7 @@ public class ProductService(
             }
         }
 
-        RemoveImages(product, request.RemoveImageIds);
+        await RemoveImagesAsync(product, request.RemoveImageIds);
         var addedImages = await AddImagesAsync(product, request.Images);
         SetHeroImage(product, request.HeroImageFileName, request.HeroImageId, request.HeroImageIndex, addedImages);
         await dbContext.SaveChangesAsync();
@@ -238,7 +238,7 @@ public class ProductService(
 
         foreach (var image in product.Images)
         {
-            DeletePhysicalFile(image.FileName);
+            await imageStorage.DeleteAsync(image.FileName);
         }
 
         dbContext.Products.Remove(product);
@@ -248,23 +248,17 @@ public class ProductService(
 
     private async Task<List<ProductImage>> AddImagesAsync(Product product, IEnumerable<IFormFile> files)
     {
-        var directory = GetImageDirectory();
-        Directory.CreateDirectory(directory);
         var addedImages = new List<ProductImage>();
 
         foreach (var file in files)
         {
-            var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            var fileName = $"{Guid.NewGuid():N}{extension}";
-            var fullPath = Path.Combine(directory, fileName);
-            await using var stream = File.Create(fullPath);
-            await file.CopyToAsync(stream);
+            var storedImage = await imageStorage.UploadAsync(file);
 
             var image = new ProductImage
             {
                 ProductId = product.Id,
-                FileName = fileName,
-                FilePath = $"/uploads/products/{fileName}"
+                FileName = storedImage.PublicId,
+                FilePath = storedImage.SecureUrl
             };
             product.Images.Add(image);
             addedImages.Add(image);
@@ -273,7 +267,7 @@ public class ProductService(
         return addedImages;
     }
 
-    private void RemoveImages(Product product, string? imageIds)
+    private async Task RemoveImagesAsync(Product product, string? imageIds)
     {
         if (string.IsNullOrWhiteSpace(imageIds))
         {
@@ -293,7 +287,7 @@ public class ProductService(
                 continue;
             }
 
-            DeletePhysicalFile(image.FileName);
+            await imageStorage.DeleteAsync(image.FileName);
             dbContext.ProductImages.Remove(image);
             product.Images.Remove(image);
         }
@@ -369,17 +363,6 @@ public class ProductService(
         }
 
         return Result.Success();
-    }
-
-    private string GetImageDirectory() => Path.Combine(environment.WebRootPath ?? Path.Combine(environment.ContentRootPath, "wwwroot"), "uploads", "products");
-
-    private void DeletePhysicalFile(string fileName)
-    {
-        var path = Path.Combine(GetImageDirectory(), fileName);
-        if (File.Exists(path))
-        {
-            File.Delete(path);
-        }
     }
 
     private static ProductResponse ToResponse(Product product) => new(

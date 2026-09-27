@@ -17,9 +17,11 @@ public class RefundService(ApplicationDbContext dbContext) : IRefundService
             return Result<RefundResponse>.Failure("Order not found.");
         }
 
-        if (order.PaymentMethod != PaymentMethod.Esewa || order.PaymentStatus != PaymentStatus.Paid || order.OrderStatus != OrderStatus.Cancelled)
+        var isEligibleEsewaOrder = order.PaymentMethod == PaymentMethod.Esewa && order.OrderStatus == OrderStatus.Cancelled;
+        var isEligibleCodOrder = order.PaymentMethod == PaymentMethod.COD && order.OrderStatus == OrderStatus.Delivered;
+        if (order.PaymentStatus != PaymentStatus.Paid || (!isEligibleEsewaOrder && !isEligibleCodOrder))
         {
-            return Result<RefundResponse>.Failure("Only paid, cancelled eSewa orders can be refunded.");
+            return Result<RefundResponse>.Failure("Only paid, cancelled eSewa or paid, delivered COD orders can be refunded.");
         }
 
         var existingRequest = await dbContext.RefundRequests
