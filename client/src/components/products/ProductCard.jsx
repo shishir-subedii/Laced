@@ -26,13 +26,13 @@ export default function ProductCard({ product }) {
   const availableSizes = sizes.filter((size) => Number(size.quantity) > 0).map((size) => size.size);
 
   return (
-    <article className="group overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300">
+    <article className="group overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50">
       <Link to={`/products/${product.id}`} className="block">
         <div className="overflow-hidden">
           <img
             src={buildProductImage(product)}
             alt={product.name}
-            className="h-72 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+            className="h-72 w-full object-cover"
           />
         </div>
       </Link>

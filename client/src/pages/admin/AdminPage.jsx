@@ -35,7 +35,7 @@ export default function AdminPage() {
 
       <div className="grid gap-5 md:grid-cols-3">
         {adminLinks.map((link) => (
-          <Link key={link.title} to={link.to} className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300">
+          <Link key={link.title} to={link.to} className="rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50">
             <h2 className="mt-3 text-2xl font-semibold tracking-[-0.05em] text-slate-900">{link.title}</h2>
             <p className="mt-3 text-sm text-slate-600">{link.description}</p>
           </Link>

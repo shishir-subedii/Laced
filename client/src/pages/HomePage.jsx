@@ -43,7 +43,7 @@ export default function HomePage() {
             <Link
               key={category.name}
               to={category.href}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50"
             >
               <p className="text-xl font-semibold tracking-[-0.04em] text-slate-900">{category.name}</p>
             </Link>
@@ -58,8 +58,8 @@ export default function HomePage() {
         </div>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {featuredProducts.map((product) => (
-            <Link key={product.id} to="/shop" className="group block overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300">
-              <img src={product.image} alt={product.name} className="h-72 w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+            <Link key={product.id} to="/shop" className="group block overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50">
+              <img src={product.image} alt={product.name} className="h-72 w-full object-cover" />
               <div className="p-5">
                 <div className="flex items-center justify-between gap-3"><span className="text-xs font-medium uppercase tracking-[0.2em] text-slate-500">{product.category}</span><span className="text-xs font-medium text-slate-500">{product.accent}</span></div>
                 <h3 className="mt-3 text-xl font-semibold tracking-[-0.04em] text-slate-900">{product.name}</h3>

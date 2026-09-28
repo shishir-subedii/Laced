@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
 
@@ -16,6 +17,7 @@ export default function LoginPage() {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   if (isAuthenticated) {
     const redirectTo = role === 'Admin' ? '/admin' : location.state?.from || '/account';
@@ -83,14 +85,19 @@ export default function LoginPage() {
 
         <div>
           <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={values.password}
-            onChange={(event) => setValues((current) => ({ ...current, password: event.target.value }))}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 text-slate-900 outline-none transition focus:border-slate-400"
-            placeholder="Enter your password"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              value={values.password}
+              onChange={(event) => setValues((current) => ({ ...current, password: event.target.value }))}
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-3 pr-12 text-slate-900 outline-none transition focus:border-slate-400"
+              placeholder="Enter your password"
+            />
+            <button type="button" onClick={() => setShowPassword((current) => !current)} className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-slate-500 hover:bg-slate-200 hover:text-slate-900" aria-label={showPassword ? 'Hide password' : 'Show password'}>
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
           {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
         </div>
 
