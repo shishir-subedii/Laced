@@ -1,6 +1,20 @@
 import { Link } from 'react-router-dom';
 import { categories, featuredProducts } from '../data/mockData';
 
+const styleDescriptions = {
+  Running: 'Lightweight pairs for daily miles and quick city movement.',
+  Lifestyle: 'Clean, easy silhouettes that work with everything you wear.',
+  Court: 'Crisp low-tops with a confident, classic profile.',
+  'New Arrivals': 'Fresh shapes and colors, just added to the rotation.',
+};
+
+const styleImages = [
+  'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=80',
+  'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?auto=format&fit=crop&w=900&q=80',
+];
+
 export default function HomePage() {
   return (
     <div className="space-y-16 pb-8">
@@ -34,18 +48,27 @@ export default function HomePage() {
       </section>
 
       <section>
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <h2 className="text-2xl font-semibold tracking-[-0.05em] text-slate-900">Shop by Style</h2>
+        <div className="mb-7 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <h2 className="text-3xl font-semibold tracking-[-0.06em] text-slate-900">Shop by style</h2>
+          </div>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category) => (
+          {categories.map((category, index) => (
             <Link
               key={category.name}
               to={category.href}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50"
+              className="group overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50"
             >
-              <p className="text-xl font-semibold tracking-[-0.04em] text-slate-900">{category.name}</p>
+              <img src={styleImages[index]} alt="" className="h-40 w-full object-cover" />
+              <div className="p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-xl font-semibold tracking-[-0.04em] text-slate-900">{category.name === 'New Arrivals' ? 'Performance' : category.name}</p>
+                  <span className="text-lg text-slate-400 transition-colors group-hover:text-slate-700" aria-hidden="true">↗</span>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{styleDescriptions[category.name]}</p>
+              </div>
             </Link>
           ))}
         </div>
@@ -71,15 +94,30 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="grid gap-6 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-3 md:p-8">
-        <div>
-          <h3 className="text-2xl font-semibold tracking-[-0.05em] text-slate-900">Built for everyday wear.</h3>
-        </div>
-        <div className="text-sm text-slate-600">
-          Thoughtful silhouettes, balanced comfort, and no-fuss styling for campus, weekends, and daily movement.
-        </div>
-        <div className="text-sm text-slate-600">
-          A lightweight project storefront designed to showcase a modern sneaker ecommerce experience.
+      <section className="overflow-hidden rounded-[2rem] bg-slate-900 text-white shadow-sm">
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="p-7 sm:p-10 lg:p-12">
+            <h3 className="max-w-md text-3xl font-semibold leading-tight tracking-[-0.06em] sm:text-4xl">The pair you reach for without thinking.</h3>
+            <p className="mt-5 max-w-lg text-sm leading-7 text-slate-300">Thoughtful silhouettes, balanced comfort, and no-fuss styling for campus, weekends, and every plan in between.</p>
+            <Link to="/shop" className="mt-7 inline-flex rounded-full bg-white px-5 py-3 text-sm font-medium text-slate-900 transition-colors hover:bg-slate-200">Explore the collection</Link>
+          </div>
+
+          <div className="border-t border-white/15 bg-slate-800/60 p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
+            <div className="divide-y divide-white/15">
+              <div className="flex gap-4 pb-5">
+                <span className="text-sm font-semibold text-slate-400">01</span>
+                <div><p className="font-medium">Comfort that keeps up</p><p className="mt-1 text-sm leading-6 text-slate-400">Cushioned underfoot for long days and longer walks.</p></div>
+              </div>
+              <div className="flex gap-4 py-5">
+                <span className="text-sm font-semibold text-slate-400">02</span>
+                <div><p className="font-medium">Style without the effort</p><p className="mt-1 text-sm leading-6 text-slate-400">Versatile colors and clean lines for daily outfits.</p></div>
+              </div>
+              <div className="flex gap-4 pt-5">
+                <span className="text-sm font-semibold text-slate-400">03</span>
+                <div><p className="font-medium">Ready for the rotation</p><p className="mt-1 text-sm leading-6 text-slate-400">Easy pairs made to be worn, not left on the shelf.</p></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
