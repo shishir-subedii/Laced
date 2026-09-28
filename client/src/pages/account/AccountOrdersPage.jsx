@@ -39,7 +39,7 @@ export default function AccountOrdersPage() {
 
   if (orders.length === 0) {
     return (
-      <div className="border-t border-slate-200 py-8">
+      <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <h1 className="text-3xl font-semibold tracking-[-0.06em] text-slate-900">Your orders</h1>
         <p className="mt-4 text-slate-600">You have not placed any orders yet.</p>
         <Link to="/shop" className="mt-6 inline-flex rounded-full bg-slate-900 px-4 py-3 text-sm font-medium text-white hover:bg-slate-700">
@@ -50,16 +50,19 @@ export default function AccountOrdersPage() {
   }
 
   return (
-    <div className="pb-8">
-      <div className="flex flex-col gap-2 border-b border-slate-200 pb-6 sm:flex-row sm:items-end sm:justify-between">
-        <h1 className="text-3xl font-semibold tracking-[-0.06em] text-slate-900">Your orders</h1>
+    <div className="space-y-5 pb-8">
+      <div className="flex flex-col gap-2 rounded-[1.5rem] border border-slate-200 bg-white px-6 py-5 shadow-sm sm:flex-row sm:items-end sm:justify-between sm:px-8">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Account</p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-[-0.06em] text-slate-900">Your orders</h1>
+        </div>
         <p className="text-sm text-slate-500">{orders.length} order{orders.length === 1 ? '' : 's'} on this page</p>
       </div>
 
-      <div className="divide-y divide-slate-200">
+      <div className="grid gap-4">
         {orders.map((order) => (
-          <Link key={order.id} to={`/account/orders/${order.id}`} className="block py-6 transition-colors hover:bg-white/60">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <Link key={order.id} to={`/account/orders/${order.id}`} className="block rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50 sm:p-6">
+            <div className="flex flex-col gap-4 border-b border-slate-200 pb-5 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Order</p>
                 <h2 className="mt-2 truncate text-lg font-semibold tracking-[-0.03em] text-slate-900">{order.id}</h2>
@@ -71,7 +74,7 @@ export default function AccountOrdersPage() {
               </div>
             </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-y-4 border-t border-slate-200 pt-4 text-sm sm:grid-cols-4">
+            <div className="mt-5 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">
               <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Date</p><p className="mt-1 text-slate-900">{new Date(order.createdAt).toLocaleDateString()}</p></div>
               <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Total</p><p className="mt-1 font-medium text-slate-900">{formatCurrency(order.totalAmount)}</p></div>
               <div><p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Items</p><p className="mt-1 text-slate-900">{(order.items || []).reduce((sum, item) => sum + Number(item.quantity || 0), 0)} items</p></div>

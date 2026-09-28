@@ -149,12 +149,13 @@ export default function OrderDetailPage() {
 
   return (
     <div className="space-y-6 pb-8">
-      <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="flex flex-col gap-5 border-b border-slate-200 pb-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold tracking-[-0.06em] text-slate-900">{order.id}</h1>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Order details</p>
+            <h1 className="mt-2 break-all text-2xl font-semibold tracking-[-0.05em] text-slate-900 sm:text-3xl">{order.id}</h1>
           </div>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Order status</p>
               <div className="mt-2"><OrderStatusBadge status={order.orderStatus} /></div>
@@ -170,27 +171,27 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-y-5 border-t border-slate-200 pt-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Order date</p>
-            <p className="mt-2 text-sm text-slate-900">{new Date(order.createdAt).toLocaleString()}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Order date</p>
+            <p className="mt-2 text-sm text-slate-900">{new Date(order.createdAt).toLocaleDateString()}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Total</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Total</p>
             <p className="mt-2 text-lg font-semibold text-slate-900">NPR {Number(order.totalAmount || 0).toLocaleString()}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Items</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Items</p>
             <p className="mt-2 text-lg font-semibold text-slate-900">{order.items?.length || 0}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Payment</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Payment</p>
             <p className="mt-2 text-sm text-slate-900">{paymentMethod === 1 ? 'eSewa' : 'Cash on Delivery'}</p>
           </div>
         </div>
       </div>
 
-      <div className="border-y border-slate-200 py-5">
+      <div className="flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <div className="flex flex-wrap gap-3">
           {canCancel && (
             <button
@@ -227,7 +228,7 @@ export default function OrderDetailPage() {
       </div>
 
       {canRequestRefund && (
-        <form onSubmit={handleRefundSubmit} className="border-y border-slate-200 py-6 sm:py-8">
+        <form onSubmit={handleRefundSubmit} className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-2xl font-semibold tracking-[-0.05em] text-slate-900">Request refund</h2>
           <p className="mt-2 text-sm text-slate-600">Refunds are reviewed and paid manually by the Laced team.</p>
           <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -246,16 +247,16 @@ export default function OrderDetailPage() {
         </form>
       )}
 
-      <section className="border-y border-slate-200 py-6 sm:py-8">
+      <section className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex items-center justify-between gap-4"><h2 className="text-2xl font-semibold tracking-[-0.05em] text-slate-900">Refund history</h2><span className="text-sm text-slate-500">{existingRefund ? 'Refund requested' : 'No refund requested'}</span></div>
         {refunds.filter((refund) => refund.orderId === id).length === 0 ? <p className="mt-3 text-sm text-slate-600">There are no refund requests linked to this order.</p> : <div className="mt-4 divide-y divide-slate-200">{refunds.filter((refund) => refund.orderId === id).map((refund) => <div key={refund.id} className="py-4 first:pt-0 last:pb-0"><div className="flex flex-wrap items-center justify-between gap-2"><p className="font-medium text-slate-900">{['Requested', 'Approved', 'Rejected', 'Paid'][Number(refund.status)] || 'Unknown'}</p><p className="text-xs text-slate-500">{new Date(refund.createdAt).toLocaleString()}</p></div><p className="mt-2 text-sm text-slate-700">{refund.reason}</p>{refund.adminNote && <p className="mt-2 text-sm text-slate-600"><span className="font-medium text-slate-900">Admin note:</span> {refund.adminNote}</p>}</div>)}</div>}
       </section>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_360px]">
-        <div className="border-y border-slate-200 py-6 sm:py-8">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-2xl font-semibold tracking-[-0.05em] text-slate-900">Items</h2>
 
-          <div className="mt-5 divide-y divide-slate-200">
+          <div className="mt-5 divide-y divide-slate-200 rounded-xl border border-slate-200 px-4">
             {order.items?.map((item) => (
               <div key={item.id} className="flex flex-col gap-3 py-5 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
                 <img src={buildImageUrl(item.heroImage || item.image)} alt={item.productName} className="h-20 w-20 rounded-lg object-cover" />
@@ -273,7 +274,7 @@ export default function OrderDetailPage() {
           </div>
         </div>
 
-        <div className="border-y border-slate-200 py-6 sm:py-8">
+        <div className="rounded-[1.5rem] border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
           <h2 className="text-2xl font-semibold tracking-[-0.05em] text-slate-900">Shipping</h2>
 
           <div className="mt-5 space-y-4 text-sm text-slate-600">
