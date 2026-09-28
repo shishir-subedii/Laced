@@ -84,8 +84,8 @@ export default function HomePage() {
             <Link key={product.id} to="/shop" className="group block overflow-hidden rounded-[1.5rem] border border-slate-200 bg-white shadow-sm transition-colors hover:border-slate-300 hover:bg-slate-50">
               <img src={product.image} alt={product.name} className="h-72 w-full object-cover" />
               <div className="p-5">
-                <div className="flex items-center justify-between gap-3"><span className="text-xs font-medium uppercase tracking-[0.2em] text-slate-500">{product.category}</span><span className="text-xs font-medium text-slate-500">{product.accent}</span></div>
-                <h3 className="mt-3 text-xl font-semibold tracking-[-0.04em] text-slate-900">{product.name}</h3>
+                {/* <div className="flex items-center justify-between gap-3"><span className="text-xs font-medium uppercase tracking-[0.2em] text-slate-500">{product.category}</span><span className="text-xs font-medium text-slate-500">{product.accent}</span></div> */}
+                <h3 className="mt-2 text-xl font-semibold tracking-[-0.04em] text-slate-900">{product.name}</h3>
                 <p className="mt-2 text-sm text-slate-600">{product.description}</p>
                 <div className="mt-5 flex items-center justify-between"><span className="text-lg font-semibold text-slate-900">NPR {product.price.toLocaleString()}</span><span className="rounded-full border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700">View</span></div>
               </div>
